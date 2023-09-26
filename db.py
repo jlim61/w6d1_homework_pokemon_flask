@@ -1,15 +1,21 @@
 trainers = {
     '1':{
-        'name': 'Brock',
-        'trainer_type': 'Gym Leader'
+        'pc_name': 'Brock\'s PC',
+        'trainer_type': 'Gym Leader',
+        'hometown': 'Pewter City',
+        'pc_password': 'rockpokemon'
     },
     '2':{
-        'name': 'Misty',
-        'trainer_type': 'Gym Leader'
+        'pc_name': 'Misty\'s PC',
+        'trainer_type': 'Gym Leader',
+        'hometown': 'Cerulean City',
+        'pc_password': 'misty123'
     },
     '3':{
-        'name': 'Gary',
-        'trainer_type': 'Rival'
+        'pc_name': 'Gary\'s PC',
+        'trainer_type': 'Researcher, former trainer',
+        'hometown': 'Pallet Town',
+        'pc_password': 'smellyalater'
     }
 }
 
