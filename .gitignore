@@ -2,3 +2,4 @@
 Pokemon-Trainers_venv/
 __pycache__/
 migrations/
+.vscode/

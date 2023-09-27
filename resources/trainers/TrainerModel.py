@@ -2,13 +2,13 @@ from app import db
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
-class UserModel(db.Model):
+class TrainerModel(db.Model):
 
-    __tablename__ = 'users'
+    __tablename__ = 'trainers'
 
     id = db.Column(db.Integer, primary_key = True)
     pc_name = db.Column(db.String, unique = True, nullable = False)
-    hometown = db.Column(db.String, unique = True, nullable = False)
+    hometown = db.Column(db.String)
     pc_password_hash = db.Column(db.String, nullable = False)
     first_name = db.Column(db.String)
     last_name = db.Column(db.String)

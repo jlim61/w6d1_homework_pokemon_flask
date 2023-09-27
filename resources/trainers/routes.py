@@ -1,48 +1,64 @@
 from flask import request
-from uuid import uuid4
-
-from app import app
-
+from flask.views import MethodView
+from flask_smorest import abort
+from sqlalchemy.exc import IntegrityError
+from schemas import TrainerSchema, UpdateTrainerSchema, PokemonSchema, DeleteTrainerSchema
+from . import bp
+from .TrainerModel import TrainerModel
 from db import trainers, pokemon
 
-@app.get('/trainers')
-def get_trainers():
-    return {'trainers': trainers},200
+@bp.route('/trainers')
+class TrainerList(MethodView):
+    # get all trainers
+    @bp.response(200, TrainerSchema(many=True))
+    def get(self):
+        return TrainerModel.query.all()
+    
+    # create trainer
+    @bp.arguments(TrainerSchema)
+    @bp.response(201, TrainerSchema)
+    def post(self, trainer_data):
+        trainer = TrainerModel()
+        trainer.from_dict(trainer_data)
+        try:
+            trainer.save()
+            return trainer_data
+        except IntegrityError:
+            abort(400, message='PC Name already taken')
 
-@app.get('/trainers/<trainer_id>')
-def get_trainer(trainer_id):
-    try:
-        trainer = trainers[trainer_id]
-        return trainer, 200
-    except KeyError:
-        return {'message': 'trainer not found'}, 400
-
-@app.post('/trainers')
-def create_trainer():
-    trainer_data = request.get_json()
-    trainers[uuid4().hex] = trainer_data
-    return trainer_data, 201
-
-@app.put('/trainers/<trainer_id>')
-def update_trainer(trainer_id):
-    trainer_data = request.get_json()
-    try:
-        trainer = trainers[trainer_id]
-        trainer['name'] = trainer_data['name']
-        return trainer, 200
-    except KeyError:
-        return {'message': 'trainer not found'}, 400
-
-@app.delete('/trainers/<trainer_id>')
-def delete_trainer(trainer_id):
-  try:
-    deleted_trainer = trainers.pop(trainer_id)
-    return {'message':f'{deleted_trainer["name"]} deleted'}, 202
-  except KeyError:
-    return {'message': 'Trainer not found'}, 400
+    # delete trainer
+    @bp.arguments(DeleteTrainerSchema)
+    def delete(self, trainer_data):
+        trainer = TrainerModel.query.filter_by(pc_name=trainer_data['pc_name']).first()
+        if trainer and trainer.check_pc_password(trainer_data['pc_password']):
+            trainer.delete()
+            return {'message': f'{trainer_data["pc_name"]} deleted'}, 202
+        abort(400, message='PC Name or PC Password Invalid')
 
 
-@app.get('/trainers/<trainer_id>/pokemon')
+@bp.route('/trainers/<trainer_id>')
+class Trainer(MethodView):
+
+    # get a trainer
+    @bp.response(200, TrainerSchema)
+    def get(self, trainer_id):
+        trainer = TrainerModel.query.get_or_404(trainer_id, description='User Not Found')
+        return trainer
+
+    # edit a trainer
+    @bp.arguments(UpdateTrainerSchema)
+    @bp.response(200, TrainerSchema)
+    def put(self, trainer_data, trainer_id):
+        trainer = TrainerModel.query.get_or_404(trainer_id, description='User Not Found')
+        if trainer and trainer.check_pc_password(trainer_data['pc_password']):
+            try:
+                trainer.from_dict(trainer_data)
+                trainer.save()
+            except IntegrityError:
+                abort(400, message='PC Name already taken')
+
+@bp.get('/trainers/<trainer_id>/pokemon')
+@bp.response(200, PokemonSchema(many=True))
 def get_trainer_pokemon(trainer_id):
     if trainer_id not in trainers:
         return {'message': 'trainer not found'}, 400

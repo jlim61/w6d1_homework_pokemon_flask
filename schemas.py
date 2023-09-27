@@ -3,7 +3,7 @@ from marshmallow import Schema, fields
 class PokemonSchema(Schema):
     # when we make id, we get id. if we are requesting info, id not required
     id = fields.Str(dumps_only=True)
-    pokemon = fields.Str(required=True)
+    pokemon_species = fields.Str(required=True)
     trainer_id = fields.Str(required=True)
 
 class TrainerSchema(Schema):

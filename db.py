@@ -21,27 +21,27 @@ trainers = {
 
 pokemon = {
     '1':{
-        'pokemon': 'Onix',
+        'pokemon_species': 'Onix',
         'trainer_id': '1'
     },
     '2':{
-        'pokemon': 'Geodude',
+        'pokemon_species': 'Geodude',
         'trainer_id': '1'
     },
     '3':{
-        'pokemon': 'Starmie',
+        'pokemon_species': 'Starmie',
         'trainer_id': '2'
     },
     '4':{
-        'pokemon': 'Togepi',
+        'pokemon_species': 'Togepi',
         'trainer_id': '2'
     },
     '5':{
-        'pokemon': 'Blastoise',
+        'pokemon_species': 'Blastoise',
         'trainer_id': '3'
     },
     '6':{
-        'pokemon': 'Umbreon',
+        'pokemon_species': 'Umbreon',
         'trainer_id': '3'
     }
 }

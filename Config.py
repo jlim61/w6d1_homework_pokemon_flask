@@ -2,7 +2,7 @@ import os
 
 class Config:
     PROPAGATE_EXCEPTIONS = True
-    API_TITLE = 'Fakebook Rest Api'
+    API_TITLE = 'Pokemon Trainer API'
     API_VERSION = 'v1'
     OPENAPI_VERSION = '3.0.3'
     OPENAPI_URL_PREFIX = '/'
