@@ -1,3 +1,9 @@
+# connecting to db
+# in terminal run:
+# flask db init
+# flask db migrate -m "message"
+# flask db upgrade
+
 trainers = {
     '1':{
         'pc_name': 'Brock\'s PC',

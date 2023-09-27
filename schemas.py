@@ -15,6 +15,11 @@ class TrainerSchema(Schema):
     first_name = fields.Str()
     last_name = fields.Str()
 
+
+class TrainerPokedex(TrainerSchema):
+   pc = fields.List(fields.Nested(TrainerSchema))
+   registered_pokemon = fields.List(fields.Nested(PokemonSchema))
+
 class UpdateTrainerSchema(Schema):
   pc_name = fields.Str()
   hometown = fields.Str()
