@@ -18,7 +18,7 @@ class PokemonList(MethodView):
     # get all pokemon
   @jwt_required()
   @bp.response(200, PokemonSchema(many=True))
-  def get_pokemon(self):
+  def get(self):
     return PokemonModel.query.all()
   
   # create pokemon
