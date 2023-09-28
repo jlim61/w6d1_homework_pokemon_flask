@@ -19,8 +19,9 @@ class TrainerSchema(Schema):
 
 
 class TrainerSchemaNested(TrainerSchema):
-   pc_pokemon = fields.List(fields.Nested(PokemonSchema), dump_only=True)
-   registered_trainers = fields.List(fields.Nested(TrainerSchema), dump_only=True)
+   owned_pokemon = fields.List(fields.Nested(PokemonSchema), dump_only=True)
+   trainers_registered = fields.List(fields.Nested(TrainerSchema), dump_only=True)
+  #  updated these to match the table name from TrainerModel to see if that fixes it
 
 class UpdateTrainerSchema(Schema):
   pc_user = fields.Str()
