@@ -29,10 +29,10 @@ class TrainerList(MethodView):
     # delete trainer
     @bp.arguments(DeleteTrainerSchema)
     def delete(self, trainer_data):
-        trainer = TrainerModel.query.filter_by(pc_user=trainer_data['pc_name']).first()
+        trainer = TrainerModel.query.filter_by(pc_user=trainer_data['pc_user']).first()
         if trainer and trainer.check_pc_password(trainer_data['pc_password']):
             trainer.delete()
-            return {'message': f'{trainer_data["pc_name"]} deleted'}, 202
+            return {'message': f'{trainer_data["pc_user"]} deleted'}, 202
         abort(400, message='PC Name or PC Password Invalid')
 
 
@@ -47,15 +47,15 @@ class Trainer(MethodView):
 
     # edit a trainer
     @bp.arguments(UpdateTrainerSchema)
-    @bp.response(200, TrainerSchema)
     def put(self, trainer_data, trainer_id):
-        trainer = TrainerModel.query.get_or_404(trainer_id, description='User Not Found')
+        trainer = TrainerModel.query.get_or_404(trainer_id, description='Trainer Not Found')
         if trainer and trainer.check_pc_password(trainer_data['pc_password']):
             try:
                 trainer.from_dict(trainer_data)
                 trainer.save()
+                return trainer
             except IntegrityError:
-                abort(400, message='PC Name already taken')
+                abort(400, message='PC User already taken')
 
 @bp.get('/trainers/<trainer_id>/pokemon')
 @bp.response(200, PokemonSchema(many=True))
@@ -65,7 +65,7 @@ def get_trainer_pokemon(trainer_id):
     trainer_pokemon = [pokemon for pokemon in pokemon.values() if pokemon['trainer_id'] == trainer_id]
     return trainer_pokemon, 200
 
-@bp.route('/user/register/<registering_id>/<registered_id>')
+@bp.route('/trainer/register/<registering_id>/<registered_id>')
 class RegisterTrainer(MethodView):
 
     # register trainer
@@ -80,7 +80,7 @@ class RegisterTrainer(MethodView):
 
     # unregister trainer
     @bp.response(200, TrainerSchema(many=True))
-    def post(self,registering_id,registered_id):
+    def put(self,registering_id,registered_id):
         trainer = TrainerModel.query.get(registering_id)
         trainer_to_unregister = TrainerModel.query.get(registered_id)
         if trainer and trainer_to_unregister:

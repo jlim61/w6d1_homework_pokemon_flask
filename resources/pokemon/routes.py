@@ -2,18 +2,19 @@ from flask import request
 from uuid import uuid4
 from flask.views import MethodView
 from flask_smorest import abort
-from resources.pokemon import PokemonModel
-from resources.trainers import TrainerModel
 
+from resources.trainers.TrainerModel import TrainerModel
+
+from sqlalchemy.exc import IntegrityError
 from schemas import PokemonSchema
+from .PokemonModel import PokemonModel
 from . import bp
-from app import app
 from db import pokemon
 
 @bp.route('/')
 class PokemonList(MethodView):
     # get all pokemon
-  @bp.resposne(200, PokemonSchema(many=True))
+  @bp.response(200, PokemonSchema(many=True))
   def get_pokemon(self):
     return PokemonModel.query.all()
   
@@ -21,13 +22,13 @@ class PokemonList(MethodView):
   @bp.arguments(PokemonSchema)
   @bp.response(200, PokemonSchema)
   def post(self, pokemon_data):
-    p = PokemonModel(**pokemon_data)
-    t = TrainerModel.query.get(pokemon_data['trainer_id'])
-    if t:
-      p.save()
-      return p
-    else:
-      abort(400, message='Invalid Trainer ID')
+      p = PokemonModel(**pokemon_data)
+      t = TrainerModel.query.get(pokemon_data['trainer_id'])
+      if t:
+          p.save()
+          return p
+      else:
+          abort(400, message='Invalid Trainer ID')
 
 @bp.route('/<pokemon_id>')
 class Pokemon(MethodView):
@@ -56,11 +57,10 @@ class Pokemon(MethodView):
   def delete(self, pokemon_id):
     request_data = request.get_json()
     trainer_id = request_data['trainer_id']
-    pokemon_name = request_data['pokemon_species']
     p = PokemonModel.query.get(pokemon_id)
     if p:
       if p.trainer_id == trainer_id:
         p.delete()
-        return {'message': f'{pokemon_name} was released'}
+        return {'message': 'Pokemon was released'}, 202
       abort(400, message='You can\'t release another trainer\'s Pokemon!')
     abort(400, message='Invalid Pokemon ID')

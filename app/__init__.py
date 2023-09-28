@@ -22,3 +22,4 @@ from resources.trainers import routes
 from resources.pokemon import routes
 
 from resources.trainers.TrainerModel import TrainerModel
+from resources.pokemon.PokemonModel import PokemonModel

@@ -2,7 +2,7 @@ from app import db
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
-registering_trainers = db.table('registering_trainers',
+registering_trainers = db.Table('registering_trainers',
     db.Column('registering_id', db.Integer, db.ForeignKey('trainers.id')),
     db.Column('registered_id', db.Integer, db.ForeignKey('trainers.id'))
     )
@@ -28,7 +28,7 @@ class TrainerModel(db.Model):
 
 
     def __repr__(self):
-        return f'<Trainer: {self.pc_name}'
+        return f'<Trainer: {self.pc_user}'
     
     def hash_pc_password(self, pc_password):
         self.pc_password_hash = generate_password_hash(pc_password)
@@ -59,6 +59,6 @@ class TrainerModel(db.Model):
             self.save()
 
     def unregister_trainer(self,trainer):
-        if self.is_registered:
+        if self.is_registered(trainer):
             self.trainers_registered.remove(trainer)
             self.save()
