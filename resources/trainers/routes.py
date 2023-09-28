@@ -60,7 +60,7 @@ class Trainer(MethodView):
     # get a trainer
     @bp.response(200, TrainerSchemaNested)
     def get(self, trainer_id):
-        user = None
+        trainer = None
         if trainer_id.isdigit():
             trainer = TrainerModel.query.get(trainer_id)
         if not trainer:
