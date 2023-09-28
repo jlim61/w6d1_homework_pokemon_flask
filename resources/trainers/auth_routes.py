@@ -8,7 +8,7 @@ from .TrainerModel import TrainerModel
 
 @bp.post('/initiate')
 @bp.arguments(TrainerSchema)
-@bp.response(200, TrainerSchema)
+@bp.response(201, TrainerSchema)
 def initiate_trainer(trainer_data):
     trainer = TrainerModel()
     trainer.from_dict(trainer_data)

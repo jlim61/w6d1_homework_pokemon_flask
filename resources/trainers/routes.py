@@ -33,7 +33,7 @@ class TrainerList(MethodView):
     def delete(self, trainer_data):
         trainer_id = get_jwt_identity()
         trainer = TrainerModel.query.get(trainer_id)
-        if trainer and trainer.pc_user == trainer['pc_user'] and trainer.check_pc_password(trainer_data['pc_password']):
+        if trainer and trainer.pc_user == trainer_data['pc_user'] and trainer.check_pc_password(trainer_data['pc_password']):
             trainer.delete()
             return {'message': f'{trainer_data["pc_user"]} deleted'}, 202
         abort(400, message='PC Name or PC Password Invalid')
