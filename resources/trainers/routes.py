@@ -41,9 +41,10 @@ class TrainerList(MethodView):
     # edit a trainer
     @jwt_required()
     @bp.arguments(UpdateTrainerSchema)
-    def put(self, trainer_data, trainer_id):
+    @bp.response(200, TrainerSchema)
+    def put(self, trainer_data):
         trainer_id = get_jwt_identity()
-        trainer = TrainerModel.query.gget(trainer_id)
+        trainer = TrainerModel.query.get(trainer_id)
         if trainer and trainer.check_pc_password(trainer_data['pc_password']):
             try:
                 trainer.from_dict(trainer_data)
