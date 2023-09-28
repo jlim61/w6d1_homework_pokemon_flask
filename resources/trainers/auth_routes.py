@@ -25,7 +25,7 @@ def login(login_info):
         abort(400, message='Please include pc_user')
     if 'pc_user' in login_info:
         trainer = TrainerModel.query.filter_by(pc_user=login_info['pc_user']).first()
-    if trainer and trainer.check_password(login_info['pc_password']):
+    if trainer and trainer.check_pc_password(login_info['pc_password']):
         access_token = create_access_token(identity=trainer.id)
         return {'access_token': access_token}
     abort(400, message='Invalid PC User or Password')
