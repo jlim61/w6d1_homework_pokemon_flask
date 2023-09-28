@@ -18,9 +18,9 @@ class TrainerSchema(Schema):
     last_name = fields.Str()
 
 
-class TrainerPokedex(TrainerSchema):
-   pc = fields.List(fields.Nested(TrainerSchema), dump_only=True)
-   registered_pokemon = fields.List(fields.Nested(PokemonSchema), dump_only=True)
+class TrainerSchemaNested(TrainerSchema):
+   pc_pokemon = fields.List(fields.Nested(PokemonSchema), dump_only=True)
+   registered_trainers = fields.List(fields.Nested(TrainerSchema), dump_only=True)
 
 class UpdateTrainerSchema(Schema):
   pc_user = fields.Str()

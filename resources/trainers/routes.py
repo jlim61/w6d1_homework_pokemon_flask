@@ -2,7 +2,7 @@ from flask import request
 from flask.views import MethodView
 from flask_smorest import abort
 from sqlalchemy.exc import IntegrityError
-from schemas import TrainerSchema, UpdateTrainerSchema, PokemonSchema, DeleteTrainerSchema
+from schemas import TrainerSchema, TrainerSchemaNested, UpdateTrainerSchema, PokemonSchema, DeleteTrainerSchema
 from . import bp
 from .TrainerModel import TrainerModel
 from db import trainers, pokemon
@@ -40,7 +40,7 @@ class TrainerList(MethodView):
 class Trainer(MethodView):
 
     # get a trainer
-    @bp.response(200, TrainerSchema)
+    @bp.response(200, TrainerSchemaNested)
     def get(self, trainer_id):
         trainer = TrainerModel.query.get_or_404(trainer_id, description='User Not Found')
         return trainer
