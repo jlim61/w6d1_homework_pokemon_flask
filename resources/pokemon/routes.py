@@ -2,6 +2,7 @@ from flask import request
 from uuid import uuid4
 from flask.views import MethodView
 from flask_smorest import abort
+from flask_jwt_extended import get_jwt_identity, jwt_required, get_jwt
 
 from resources.trainers.TrainerModel import TrainerModel
 
@@ -13,7 +14,9 @@ from db import pokemon
 
 @bp.route('/')
 class PokemonList(MethodView):
+
     # get all pokemon
+    
   @bp.response(200, PokemonSchema(many=True))
   def get_pokemon(self):
     return PokemonModel.query.all()

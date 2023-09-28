@@ -31,6 +31,6 @@ class UpdateTrainerSchema(Schema):
   first_name = fields.Str()
   last_name = fields.Str()
 
-class DeleteTrainerSchema(Schema):
+class AuthTrainerSchema(Schema):
    pc_user = fields.Str(required=True)
    pc_password = fields.Str(required=True, load_only = True)
