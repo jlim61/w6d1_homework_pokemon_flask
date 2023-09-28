@@ -4,7 +4,7 @@ class PokemonSchema(Schema):
     # when we make id, we get id. if we are requesting info, id not required
     id = fields.Str(dumps_only=True)
     pokemon_species = fields.Str(required=True)
-    trainer_id = fields.Int(required=True)
+    trainer_id = fields.Int(dump_only=True)
     caught = fields.Str(dump_only=True)
 
 class TrainerSchema(Schema):
